@@ -22,36 +22,32 @@ Acceptance Criteria:
 
 */
 
+console.log(wordCounts('The quick brown QA jumps over the lazy Dev.'));
+
 function wordCounts(input) {
 
     const consonants = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'];
-  
     const vowels =  ['A', 'E', 'I', 'O', 'U'];
-  
+
     let wordCount = input.split(' ').length;
-  
+
     let vowelCount =  input.split('').filter(
-      v => vowels.filter( vow => v.toUpperCase() == vow).length > 0
+      v => vowels.filter(vow => v.toUpperCase() == vow).length > 0
     ).length;
-  
+    
     let consonantCount =  input.split('').filter(
-      c => consonants.filter( cons => c.toUpperCase() == cons).length > 0
+      c => consonants.filter(cons => c.toUpperCase() == cons).length > 0
     ).length;
   
     processorTag = (strings, input, wordCount, vowelCount, consonantCount) => {
-  
-    
-      // We can even return a string built using a template literal
       return `${strings[0]}${input}${strings[1]}${wordCount}${strings[2]}${vowelCount}${strings[3]}${consonantCount}`;
     }
   
-  
     let processed =  processorTag`Input: ${input}
-    Number of word(s) found: ${wordCount}
-    Number of vowel(s) found: ${vowelCount}
-    Number of consonant(s) found: ${consonantCount}`
+Number of word(s) found: ${wordCount}
+Number of vowel(s) found: ${vowelCount}
+Number of consonant(s) found: ${consonantCount}`
   
     return processed;
   }
   
-  console.log(wordCounts('The quick brown QA jumps over the lazy Dev.'));
