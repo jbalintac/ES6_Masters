@@ -40,6 +40,26 @@ function getResult(input) {
 
   let result = 'The winners are: \n';
 
+  resolveOrdinal = (input) => {
+
+    let toArray = input.toString().split('');
+    let lastDigit = toArray[toArray.length - 1];
+
+    let ordinal = 'th';
+
+    if(lastDigit == 1) {
+      ordinal = 'st'
+    }
+    else if (lastDigit == 2) {
+      ordinal = 'nd'
+    }
+    else if (lastDigit == 2) {
+      ordinal = 'rd'
+    }
+
+    return input + ordinal;
+  }
+
   return result + input.sort((a, b) => b.score - a.score).map(({name, score}, index) => 
-  `${index + 1} ${name} scored  ${score} out of 10`).join('\n');
+  `${resolveOrdinal(index + 1)} ${name} scored  ${score} out of 10`).join('\n');
 }
