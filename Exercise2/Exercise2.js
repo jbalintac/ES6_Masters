@@ -12,13 +12,13 @@ Acceptance Criteria
 
     The winners are: 
 
-3. For tied scores (optional handler), the number of tied contestants will appear as:
-
-    The winners are: 
-
     (1st) Foo scored 9 out of 10
     (2nd) Bar scored 7 out of 10
     (3rd) Baz scored 6 out of 10
+
+3. For tied scores (optional handler), the number of tied contestants will appear as:
+
+    (2nd) 3 scored 8 out of 10
 
 4. Use destructuring when retrieving the top 3 winners
 
@@ -32,7 +32,13 @@ class ContestScore
     };
 }
 
-let result = getResult([new ContestScore('Bar', 7),new ContestScore('Baz', 6),new ContestScore('Foo', 9)])
+let result = getResult([
+  new ContestScore('Baz', 8),
+  new ContestScore('Bar', 7),
+  new ContestScore('Bar', 7),
+  new ContestScore('Baz', 6),
+  new ContestScore('Foo', 9)])
+
 console.log(result);
 
 
@@ -60,6 +66,29 @@ function getResult(input) {
     return input + ordinal;
   }
 
-  return result + input.sort((a, b) => b.score - a.score).map(({name, score}, index) => 
-  `${resolveOrdinal(index + 1)} ${name} scored  ${score} out of 10`).join('\n');
+  groupByArray = (xs, key) => { 
+    return xs.reduce(function (rv, x) { 
+      let v = key instanceof Function ? key(x) :
+         x[key]; let el = rv.find((r) => r && r.key === v); 
+          if (el) { el.values.push(x); } 
+          else { rv.push({ key: v, values: [x] }); } return rv; }, []); 
+  }
+
+  return result + 
+    groupByArray(input, 'score')
+      .sort((a, b) => b.key - a.key)
+      .map((r, index) => {
+
+        // NOTE: Destructuring AC
+        let {name, score} = r.values[0];
+
+        if(r.values.length > 1)   {
+          return `${resolveOrdinal(index + 1)} ${r.values.length} scored  ${score} out of 10`;
+        }
+
+        return `${resolveOrdinal(index + 1)} ${name} scored  ${score} out of 10`;
+        
+      })
+      .slice(0,3)
+      .join('\n');
 }
